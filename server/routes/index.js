@@ -7,17 +7,28 @@ const webhookController = require('../controllers/webhookController');
 const authMiddleware = require('../middleware/auth');
 
 // Public route: Webhook (doesn't require authentication)
-router.post('/webhook', webhookController.handleWebhook);
+router.post('/webhook', webhookController.handleWebhook); 
+router.post('/update-status', webhookController.updateTransactionStatus);
+
 
 // Middleware: Protect routes below this line (require authentication)
 router.use(authMiddleware);
 
 // Protected routes
-router.get('/transactions', transactionController.getAllTransactions); // Get all transactions 
-router.get('/transactions/collect/:collectId', transactionController.getCollectTransactions); // Get transactions for a specific collect
-router.get('/transactions/gateway/:gateway', transactionController.getGatewayTransactions); // Get transactions for a specific gateway
-router.get('/transactions/school/:schoolId', transactionController.getSchoolTransactions); // Get transactions for a specific school
-router.get('/transaction/status/:customOrderId', transactionController.checkTransactionStatus); // Check transaction status
-router.post('/create-collect-request', transactionController.createPaymentRequest); // Create a payment request
+router.get('/transactions', transactionController.getAllTransactions); 
+router.get('/transactions/collect/:collectId', transactionController.getCollectTransactions); 
+router.get('/transactions/gateway/:gateway', transactionController.getGatewayTransactions); 
+router.get('/transactions/school/:schoolId', transactionController.getSchoolTransactions); 
+
+router.get('/transactions/status/:customOrderId', transactionController.checkTransactionStatus);  
+router.get('/transactions/status/filter/:status', transactionController.getStatusTransactions);  
+router.get('/transactions/amount/:amount', transactionController.getOrderAmountTransactions);   
+router.get('/transactions/transaction-amount/:amount', transactionController.getTransationAmountTransactions);
+
+
+
+
+router.post('/create-collect-request', transactionController.createPaymentRequest); 
+
 
 module.exports = router; 

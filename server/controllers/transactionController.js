@@ -24,7 +24,44 @@ const getGatewayTransactions = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
+};  
+
+const getCustomOrderTransactions = async (req, res, next) => {
+    try {
+        const transactions = await transactionService.getCustomeOrdrIdTransactions(req.params.customOrderId);
+        res.json(transactions);
+    } catch (error) {
+        next(error);
+    }
+}; 
+
+const getOrderAmountTransactions = async (req, res, next) => {
+    try {
+        const transactions = await transactionService.getOrderAmountTransactions(req.params.amount);
+        res.json(transactions);
+    } catch (error) {
+        next(error);
+    }
+}; 
+
+const getTransationAmountTransactions = async (req, res, next) => {
+    try {
+        const transactions = await transactionService.getTransationAmountTransactions(req.params.amount);
+        res.json(transactions);
+    } catch (error) {
+        next(error);
+    }
+}; 
+
+const getStatusTransactions = async (req, res,next) => {
+    try {
+        const transactions = await transactionService.getStatusTransactions(req.params.status);
+        res.json(transactions);
+    } catch (error) {
+        next(error);
+    }
 };
+    
 
 const getSchoolTransactions = async (req, res, next) => {
     try {
@@ -59,5 +96,9 @@ module.exports = {
     getGatewayTransactions,
     getSchoolTransactions,
     checkTransactionStatus,
-    createPaymentRequest
+    createPaymentRequest, 
+    getCustomOrderTransactions,
+    getOrderAmountTransactions,
+    getTransationAmountTransactions,
+    getStatusTransactions
 };

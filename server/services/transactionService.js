@@ -1,6 +1,7 @@
 const CollectRequest = require('../models/CollectRequest');
 const CollectRequestStatus = require('../models/CollectRequestStatus');
-const axios = require('axios');
+const axios = require('axios'); 
+const mongoose = require('mongoose');
 
 const getAllTransactions = async (filters = {}) => {
     const query = filters.status ? { status: filters.status } : {};
@@ -37,7 +38,53 @@ const getGatewayTransactions = async (gateway) => {
             return mergeTransactionData(request, status);
         })
     );
+}; 
+
+const getOrderAmountTransactions = async (orderAmount) => {
+    const requests = await CollectRequest.find({ order_amount: orderAmount });
+    return Promise.all(
+        requests.map(async (request) => {
+            const status = await CollectRequestStatus.findOne({ order_amount: request.order_amount});
+            return mergeTransactionData(request, status);
+        })
+    );
+}; 
+
+const getTransationAmountTransactions = async (transactionAmount) => {
+    const data = await CollectRequestStatus.find({ transaction_amount: transactionAmount }); 
+    if (!data.length) return []; 
+    
+    return data
+
+    
 };
+
+const getStatusTransactions = async (status) => {
+    const statusRecords = await CollectRequestStatus.find({ status });
+    if (!statusRecords.length) return []; 
+
+    const collectIds = statusRecords.map((record) => record.collect_id);
+
+    const collectRequests = await CollectRequest.find({ _id: { $in: collectIds } });
+
+    return collectRequests.map((request) => {
+        const status = statusRecords.find((s) => s.collect_id === request._id.toString());
+        return mergeTransactionData(request, status);
+    });
+};
+
+const getCustomeOrdrIdTransactions = async (customOrderId) => {
+    const requests = await CollectRequest.find({ custom_order_id: customOrderId });
+    return Promise.all(
+        requests.map(async (request) => {
+            const status = await CollectRequestStatus.findOne({ collect_id: request._id.toString() });
+            return mergeTransactionData(request, status);
+        })
+    );
+};
+
+
+
 
 const getSchoolTransactions = async (schoolId) => {
     const collectRequests = await CollectRequest.find({ school_id: schoolId });
@@ -94,16 +141,83 @@ const createPaymentRequest = async (data) => {
 };
 
 const handleWebhook = async (data) => {
-    const { order_info } = data;
-    return await CollectRequestStatus.create({
-        collect_id: order_info.order_id,
-        status: data.status === 200 ? 'SUCCESS' : 'FAILED',
-        payment_method: order_info.payment_method,
-        gateway: order_info.gateway,
-        transaction_amount: order_info.transaction_amount,
-        bank_reference: order_info.bank_reference
-    });
+    try {
+        const { order_info } = data;
+
+        if (!order_info || !order_info.order_id) {
+            throw new Error('Invalid webhook payload: Missing order_info or order_id');
+        }
+
+        // Find the transaction by custom_order_id
+        const existingTransaction = await CollectRequest.findOne({
+            custom_order_id: order_info.order_id
+        });
+
+        if (!existingTransaction) {
+            throw new Error(`Transaction with ID ${order_info.order_id} not found`);
+        }
+
+        // Update or create the transaction status
+        // Note that collect_id is stored as String
+        const updatedStatus = await CollectRequestStatus.findOneAndUpdate(
+            { collect_id: existingTransaction._id.toString() },
+            {
+                status: data.status === 200 ? 'SUCCESS' : 'FAILED',
+                payment_method: order_info.payment_method,
+                gateway: order_info.gateway || existingTransaction.gateway,
+                transaction_amount: order_info.transaction_amount,
+                bank_refrence: order_info.bank_reference  // Note: incoming payload uses reference, model uses refrence
+            },
+            { upsert: true, new: true }
+        );
+
+        return updatedStatus;
+    } catch (error) {
+        console.error('Error handling webhook:', error);
+        throw error;
+    }
 };
+
+
+
+const updateTransactionStatus = async (data) => {
+    try {
+        const { transactionId, status, payment_method, bank_refrence } = data;
+
+        // Find the transaction by custom_order_id
+        const existingTransaction = await CollectRequest.findOne({
+            custom_order_id: transactionId
+        });
+
+        if (!existingTransaction) {
+            throw new Error(`Transaction with ID ${transactionId} not found`);
+        }
+
+        // Update the status
+        const updatedStatus = await CollectRequestStatus.findOneAndUpdate(
+            { collect_id: existingTransaction._id.toString() },
+            {
+                status: status.toUpperCase(),
+                ...(payment_method && { payment_method }),
+                gateway: existingTransaction.gateway, 
+                ...(bank_refrence && { bank_refrence })
+            },
+            { upsert: true, new: true }
+        );
+
+        return updatedStatus;
+    } catch (error) {
+        console.error('Error updating transaction status:', error);
+        throw error;
+    }
+};
+
+
+
+
+
+
+
 
 const mergeTransactionData = (request, status) => ({
     collect_id: request._id,
@@ -122,8 +236,13 @@ module.exports = {
     getAllTransactions,
     getCollectTransactions,
     getGatewayTransactions,
+    getOrderAmountTransactions,
+    getTransationAmountTransactions,
+    getStatusTransactions,
+    getCustomeOrdrIdTransactions,
     getSchoolTransactions,
     checkTransactionStatus,
     createPaymentRequest,
-    handleWebhook
+    handleWebhook,
+    updateTransactionStatus
 };
