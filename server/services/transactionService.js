@@ -1,7 +1,8 @@
 const CollectRequest = require('../models/CollectRequest');
 const CollectRequestStatus = require('../models/CollectRequestStatus');
 const axios = require('axios'); 
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'); 
+require('dotenv').config();
 
 const getAllTransactions = async (filters = {}) => {
     const query = filters.status ? { status: filters.status } : {};
@@ -114,24 +115,36 @@ const createPaymentRequest = async (data) => {
         gateway: 'CASHFREE',
         order_amount: data.amount,
         custom_order_id: `ORD_${Date.now()}`
-    });
+    }); 
+
+
+    const payload = {
+        school_id: data.school_id, // Use SCHOOL_ID from the request body
+        pg_key: process.env.PG_KEY,
+        collect_id: collectRequest._id,
+        custom_order_id: collectRequest.custom_order_id,
+        amount: data.amount
+    };
 
     const response = await axios.post(
         'https://dev-vanilla.edviron.com/erp/create-collect-request',
-        {
-            school_id: data.school_id,
-            pg_key: 'edvtest01',
-            collect_id: collectRequest._id,
-            custom_order_id: collectRequest.custom_order_id,
-            amount: data.amount
-        },
+        payload,
         {
             headers: {
                 Authorization: `Bearer ${process.env.API_KEY}`,
                 'Content-Type': 'application/json'
             }
         }
-    );
+    ); 
+    // Save the transaction status in CollectRequestStatus
+    await CollectRequestStatus.create({
+        collect_id: collectRequest._id,
+        status: 'PENDING', // Initial status
+        gateway: 'CASHFREE',
+        transaction_amount: null,
+        bank_reference: null
+    });
+
 
     return {
         success: true,

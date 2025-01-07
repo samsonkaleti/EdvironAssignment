@@ -28,7 +28,7 @@ router.get('/transactions/transaction-amount/:amount', transactionController.get
 
 
 
-router.post('/create-collect-request', transactionController.createPaymentRequest); 
+router.post('/create-payment', transactionController.createPaymentRequest); 
 
 
 module.exports = router; 
