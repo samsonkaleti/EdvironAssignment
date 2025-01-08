@@ -1,12 +1,18 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { Home, FileText, School, Settings } from 'lucide-react';
+import { Home, FileText, School, Settings } from 'lucide-react'; 
+import { AuthContext } from '../context/AuthContext'; 
+import { useContext } from 'react';
 
-const Sidebar = () => {
+
+const Sidebar = () => { 
+  const { user } = useContext(AuthContext); 
+
   return (
-    <aside className="w-64 bg-green-50 border-r border-green-200 shadow-sm h-screen">
-      <div className="p-4 border-b border-green-200">
-        <h2 className="text-2xl font-bold text-green-800">Dashboard</h2>
+    <aside className="w-64 bg-gradient-to-br from-indigo-100 via-purple-50 to-teal-100 border-r border-purple-300 shadow-sm h-screen">
+      <div className="p-4 border-b border-purple-300">
+        <h2 className="text-2xl font-bold text-green-800">
+          {user ? user.token.username : ""}
+        </h2>
       </div>
       <nav className="mt-6">
         <ul className="space-y-2">

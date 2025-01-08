@@ -18,10 +18,10 @@ router.use(authMiddleware);
 router.get('/transactions', transactionController.getAllTransactions); 
 router.get('/transactions/collect/:collectId', transactionController.getCollectTransactions); 
 router.get('/transactions/gateway/:gateway', transactionController.getGatewayTransactions); 
-router.get('/transactions/school/:schoolId', transactionController.getSchoolTransactions); 
+router.get('/transactions/:schoolId', transactionController.getSchoolTransactions); 
 
 router.get('/transactions/status/:customOrderId', transactionController.checkTransactionStatus);  
-router.get('/transactions/status/filter/:status', transactionController.getStatusTransactions);  
+router.get('/transactions/:status', transactionController.getStatusTransactions);  
 router.get('/transactions/amount/:amount', transactionController.getOrderAmountTransactions);   
 router.get('/transactions/transaction-amount/:amount', transactionController.getTransationAmountTransactions);
 
