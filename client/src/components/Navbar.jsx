@@ -1,59 +1,57 @@
 import { useContext } from "react"; 
 import { AuthContext } from "../context/AuthContext";  
 import { Link,useNavigate } from "react-router-dom";
+import { LogOut } from "lucide-react";
 
 
-const Navbar = () => {  
+const Navbar = () => {
   const navigate = useNavigate();
-  const { user, logout } = useContext(AuthContext); 
-  
+  const { user, logout } = useContext(AuthContext);
+
   const handleLogout = () => {
     logout();
-    localStorage.removeItem("token"); 
+    localStorage.removeItem("token");
     navigate("/login");
   };
+
   return (
-    <nav className="bg-gradient-to-br from-indigo-100 via-purple-50 to-teal-100 border-b border-purple-300 shadow-sm">
+    <nav className="bg-white border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-12">
-          <h1 className="text-lg font-bold text-green-800">
+        <div className="flex items-center justify-between h-16">
+          <h1 className="text-xl font-semibold text-gray-900">
             School Payments Dashboard
           </h1>
-          <div className="flex items-center">  
-            <div className="">
-            </div>
-            {user && ( 
-              <div> 
-                
+          <div className="flex items-center gap-4">
+            {user && (
               <button
                 onClick={handleLogout}
-                className="bg-red-500 hover:bg-red-400 text-white font-bold py-1 px-3 rounded-md text-sm"
+                className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-all"
               >
+                <LogOut className="w-4 h-4" />
                 Logout
-              </button> 
+              </button>
+            )}
+            {!user && (
+              <div className="flex gap-3">
+                <Link to="/login">
+                  <button className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-all">
+                    Login
+                  </button>
+                </Link>
+                <Link to="/signup">
+                  <button className="px-4 py-2 text-sm text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-all">
+                    Sign Up
+                  </button>
+                </Link>
               </div>
             )}
-            {!user && (
-              <Link to="/login">
-                <button className="ml-4 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded-md">
-                  Login
-                </button>
-              </Link>
-            )}
-            {!user && (
-              <Link to="/signup">
-                <button className="ml-4 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded-md">
-                  Sign Up
-                </button>
-              </Link>
-            )}
-            
           </div>
         </div>
       </div>
     </nav>
   );
 };
+
 
 export default Navbar;
 

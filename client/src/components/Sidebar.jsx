@@ -1,57 +1,46 @@
+
+
 import { Link } from 'react-router-dom';
-import { Home, FileText, School, Settings } from 'lucide-react'; 
-import { AuthContext } from '../context/AuthContext'; 
+import { Home, FileText, School, Settings, ChevronDown } from 'lucide-react';
+import { AuthContext } from '../context/AuthContext';
 import { useContext } from 'react';
 
 
-const Sidebar = () => { 
-  const { user } = useContext(AuthContext); 
+const Sidebar = () => {
+  const { user } = useContext(AuthContext);
 
   return (
-    <aside className="w-64 bg-gradient-to-br from-indigo-100 via-purple-50 to-teal-100 border-r border-purple-300 shadow-sm h-screen">
-      <div className="p-4 border-b border-purple-300">
-        <h2 className="text-2xl font-bold text-green-800">
-          {user ? user.token.username : ""}
-        </h2>
+    <aside className="w-64 bg-white border-r border-gray-100 h-screen">
+      <div className="p-6 border-b border-gray-100">
+        <div className="flex items-center justify-between">
+          <div className="flex-1 min-w-0">
+            <h2 className="text-sm font-medium text-gray-900 truncate">
+              {user?.email}
+            </h2>
+            <p className="text-xs text-gray-500">Administrator</p>
+          </div>
+          <ChevronDown className="w-4 h-4 text-gray-400" />
+        </div>
       </div>
-      <nav className="mt-6">
-        <ul className="space-y-2">
-          <li>
-            <Link
-              to="/"
-              className="flex items-center px-4 py-3 text-green-800 hover:bg-green-100 rounded-lg transition-colors duration-200"
-            >
-              <Home className="w-5 h-5 mr-3" />
-              Transactions
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/school-transactions"
-              className="flex items-center px-4 py-3 text-green-800 hover:bg-green-100 rounded-lg transition-colors duration-200"
-            >
-              <School className="w-5 h-5 mr-3" />
-              School Transactions
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/reports"
-              className="flex items-center px-4 py-3 text-green-800 hover:bg-green-100 rounded-lg transition-colors duration-200"
-            >
-              <FileText className="w-5 h-5 mr-3" />
-              Reports
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/settings"
-              className="flex items-center px-4 py-3 text-green-800 hover:bg-green-100 rounded-lg transition-colors duration-200"
-            >
-              <Settings className="w-5 h-5 mr-3" />
-              Settings
-            </Link>
-          </li>
+      <nav className="p-4">
+        <ul className="space-y-1">
+          {[
+            { path: "/", icon: Home, label: "Dashboard" },
+            { path: "/transaction", icon: FileText, label: "Transactions" },
+            { path: "/school-transactions", icon: School, label: "School Transactions" },
+            { path: "/transaction-status-check", icon: FileText, label: "Status Check" },
+            { path: "/settings", icon: Settings, label: "Settings" },
+          ].map((item) => (
+            <li key={item.path}>
+              <Link
+                to={item.path}
+                className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-all"
+              >
+                <item.icon className="w-4 h-4 text-gray-400" />
+                {item.label}
+              </Link>
+            </li>
+          ))}
         </ul>
       </nav>
     </aside>

@@ -6,34 +6,34 @@ import Navbar from "./components/Navbar";
 import Sidebar from './components/Sidebar';
 import TransactionsPage from "./pages/TransactionsPage"; 
 import SchoolTransactionsPage from './pages/SchoolTransactionsPage'
+import TransactionStatusCheck from "./pages/TransactionStatusCheck"; 
+import RealTimeChart from "./pages/RealTimeChart"
+
 
 // Separate Component for Layout Logic
 const Layout = () => {
   const location = useLocation();
-
-  // Check if the current route is login or signup
-  const hideLayout = location.pathname === '/login' || location.pathname === '/signup';
+  const hideLayout = location.pathname === "/login" || location.pathname === "/signup";
 
   return (
-    <>
+    <div className="min-h-screen bg-gray-50">
       {!hideLayout && <Navbar />}
       <div className="flex">
         {!hideLayout && <Sidebar />}
-        <div className={`${hideLayout ? 'w-full' : 'flex-1 bg-gray-100 p-6 min-h-screen'}`}>
+        <main className={`${hideLayout ? "w-full" : "flex-1 p-6"}`}>
           <Routes>
-            {/* Public Routes */}
-            <Route path="/login" exact element={<LoginPage />} />
-            <Route path="/signup" exact element={<SignupPage />} />
-
-            {/* Protected Routes */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
             <Route element={<AuthGuard />}>
-              <Route path="/" element={<TransactionsPage />} />
+              <Route path="/" element={<RealTimeChart />} />
+              <Route path="/transaction" element={<TransactionsPage />} />
               <Route path="/school-transactions" element={<SchoolTransactionsPage />} />
+              <Route path="/transaction-status-check" element={<TransactionStatusCheck />} />
             </Route>
           </Routes>
-        </div>
+        </main>
       </div>
-    </>
+    </div>
   );
 };
 
@@ -46,3 +46,5 @@ const App = () => {
 };
 
 export default App;
+
+

@@ -12,7 +12,7 @@ const TransactionsPage = () => {
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const transactionsPerPage = 10;
+  const transactionsPerPage = 6;
 
   const fetchTransactions = async () => {
     try {
