@@ -15,7 +15,7 @@ const TransactionStatusCheck = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/transactions/status/${customOrderId}`,
+        `https://edvironassignment.onrender.com/api/transactions/status/${customOrderId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

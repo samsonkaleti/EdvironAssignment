@@ -19,7 +19,7 @@ const TransactionDashboard = () => {
   const fetchTransactions = async (endpoint = '/transactions') => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:8080/api${endpoint}`,{
+      const response = await fetch(`https://edvironassignment.onrender.com/api${endpoint}`,{
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'

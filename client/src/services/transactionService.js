@@ -3,7 +3,7 @@ import axios from "axios";
 export const fetchTransactionsService = async ({ status, startDate, endDate }) => {
   const token = localStorage.getItem("token");
   try {
-    const { data } = await axios.get("http://localhost:8080/api/transactions", {
+    const { data } = await axios.get("https://edvironassignment.onrender.com/api/transactions", {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,

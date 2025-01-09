@@ -18,7 +18,7 @@ const SchoolTransactionsPage = () => {
   const fetchAllTransactions = async () => {
     try {
       const token = localStorage.getItem("token");
-      const { data } = await axios.get("http://localhost:8080/api/transactions", {
+      const { data } = await axios.get("https://edvironassignment.onrender.com/api/transactions", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
