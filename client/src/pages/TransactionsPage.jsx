@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { fetchTransactionsService } from "../services/transactionService"
+import TransactionTable from "../components/TransactionTable";
+import {ChevronLeft,ChevronRight} from 'lucide-react'
 
 const TransactionsPage = () => {
   const [transactions, setTransactions] = useState([]);
@@ -45,7 +47,7 @@ const TransactionsPage = () => {
     // Filter by search term
     if (searchTerm) {
       filteredData = filteredData.filter((transaction) =>
-        transaction.collect_id
+        transaction.custom_order_id
           .toLowerCase()
           .includes(searchTerm.toLowerCase())
       );
@@ -74,14 +76,16 @@ const TransactionsPage = () => {
   const totalPages = Math.ceil(filteredTransactions.length / transactionsPerPage);
 
   return (
-    <div className="p-2 bg-gradient-to-r from-blue-50 to-indigo-50 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-indigo-800">Transactions Overview</h1>
+    <div className="p-2 bg-gray-50 min-h-screen">
+      <h1 className="text-3xl font-semibold mb-2 text-[#2869aa]">Transactions Overview</h1>
+      <p className=" text-sm text-gray-500 mb-6">View and manage  transaction details</p>
+
 
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-4 mb-6">
         <input
           type="text"
-          placeholder="Search by Collect ID"
+          placeholder="Search by Order ID"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="border p-2 rounded-lg w-full md:w-1/3 shadow-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400"
@@ -109,83 +113,61 @@ const TransactionsPage = () => {
 
       {/* Table */}
       <div className=" w-full shadow-xl rounded-lg overflow-hidden ">
-        <table className="w-full border-collapse bg-white">
-          <thead>
-            <tr className="bg-indigo-600 text-white">
-              <th className="p-3 text-left">Collect ID</th>
-              <th className="p-3 text-left">School ID</th>
-              <th className="p-3 text-left">Gateway</th>
-              <th className="p-3 text-left">Order Amount</th>
-              <th className="p-3 text-left">Transaction Amount</th>
-              <th className="p-3 text-left">Status</th>
-              <th className="p-3 text-left">Custom Order ID</th>
-              <th className="p-3 text-left">Created At</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentTransactions.length > 0 ? (
-              currentTransactions.map((transaction, index) => (
-                <tr
-                  key={index}
-                  className="hover:bg-indigo- transition-all hover:-translate-y-0.5 hover:shadow-lg duration-200 ease-in-out transform  hover:cursor-pointer"
-                >
-                  <td className="p-3 border-t">{transaction.collect_id}</td>
-                  <td className="p-3 border-t">{transaction.school_id}</td>
-                  <td className="p-3 border-t">{transaction.gateway}</td>
-                  <td className="p-3 border-t text-green-600 font-semibold">  
-                    ₹{transaction.order_amount.toLocaleString()}
-                  </td>
-                  <td className="p-3 border-t text-green-600 font-semibold">
-                    ₹{transaction.transaction_amount.toLocaleString()}
-                  </td>
-                  <td
-                    className={`p-3 border-t font-semibold ${
-                      transaction.status === "SUCCESS"
-                        ? "text-green-600"
-                        : transaction.status === "PENDING"
-                        ? "text-yellow-600"
-                        : "text-red-600"
-                    }`}
+        <TransactionTable transactions = {currentTransactions} />
+
+        
+      </div> 
+
+
+      <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+            <div className="flex-1 flex justify-between sm:hidden">
+              <button
+                onClick={() => setCurrentPage(page => page - 1)}
+                disabled={currentPage === 1}
+                className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+              >
+                Previous
+              </button>
+              <button
+                onClick={() => setCurrentPage(page => page + 1)}
+                disabled={currentPage === totalPages}
+                className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+              >
+                Next
+              </button>
+            </div>
+            <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+              <div>
+                <p className="text-sm text-gray-700">
+                  Showing <span className="font-medium">{indexOfFirstTransaction + 1}</span> to{" "}
+                  <span className="font-medium">
+                    {Math.min(indexOfLastTransaction, transactions.length)}
+                  </span>{" "}
+                  of <span className="font-medium">{transactions.length}</span> results
+                </p>
+              </div>
+              <div>
+                <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+                  <button
+                    onClick={() => setCurrentPage(page => page - 1)}
+                    disabled={currentPage === 1}
+                    className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
                   >
-                    {transaction.status}
-                  </td>
-                  <td className="p-3 border-t">{transaction.custom_order_id}</td>
-                  <td className="p-3 border-t">
-                    {new Date(transaction.createdAt).toLocaleDateString()}
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td className="p-3 text-center" colSpan="7">
-                  No transactions found
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+                    <ChevronLeft className="h-5 w-5" />
+                  </button>
+                  <button
+                    onClick={() => setCurrentPage(page => page + 1)}
+                    disabled={currentPage === totalPages}
+                    className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                  >
+                    <ChevronRight className="h-5 w-5" />
+                  </button>
+                </nav>
+              </div>
+            </div>
       </div>
 
-      {/* Pagination */}
-      <div className="flex justify-center mt-6">
-        <button
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-          className="px-4 py-2 rounded-l-lg bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50 transition-colors duration-200"
-        >
-          Previous
-        </button>
-        <span className="px-4 py-2 bg-white border-t border-b">
-          {currentPage}
-        </span>
-        <button
-          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-          disabled={currentPage === totalPages}
-          className="px-4 py-2 rounded-r-lg bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50 transition-colors duration-200"
-        >
-          Next
-        </button>
-      </div>
+     
     </div>
   );
 };

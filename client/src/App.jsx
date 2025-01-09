@@ -7,7 +7,7 @@ import Sidebar from './components/Sidebar';
 import TransactionsPage from "./pages/TransactionsPage"; 
 import SchoolTransactionsPage from './pages/SchoolTransactionsPage'
 import TransactionStatusCheck from "./pages/TransactionStatusCheck"; 
-import RealTimeChart from "./pages/RealTimeChart"
+import TransactionDashboard from "./pages/TransactionDashboard"
 
 
 // Separate Component for Layout Logic
@@ -25,7 +25,7 @@ const Layout = () => {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route element={<AuthGuard />}>
-              <Route path="/" element={<RealTimeChart />} />
+              <Route path="/" element={<TransactionDashboard />} />
               <Route path="/transaction" element={<TransactionsPage />} />
               <Route path="/school-transactions" element={<SchoolTransactionsPage />} />
               <Route path="/transaction-status-check" element={<TransactionStatusCheck />} />

@@ -32,10 +32,10 @@ const TransactionStatusCheck = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto p-6">
         <div className="mb-8">
-          <h2 className="text-4xl font-light text-slate-800">Transaction Status</h2>
+          <h2 className="text-4xl font-semibold text-[#2869aa]">Transaction Status</h2>
           <p className="text-slate-500 mt-2">Check the status of your transaction by entering the order ID below</p>
         </div>
 
@@ -43,16 +43,16 @@ const TransactionStatusCheck = () => {
           <div className="flex gap-4">
             <input
               type="text"
-              placeholder="Enter Custom Order ID"
+              placeholder="Enter Custom Order ID :  Example - test1"
               value={customOrderId}
               onChange={(e) => setCustomOrderId(e.target.value)}
-              className="flex-1 bg-slate-50 px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-purple-400 outline-none"
+              className="flex-1  px-4 py-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-purple-400 outline-none"
             />
             <button
               onClick={handleCheckStatus}
               disabled={!customOrderId || loading}
               className="px-8 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 
-                transition-colors disabled:bg-slate-300 disabled:cursor-not-allowed"
+                transition-colors disabled:bg-slate-400 disabled:cursor-not-allowed"
             >
               {loading ? "Searching..." : "Search"}
             </button>

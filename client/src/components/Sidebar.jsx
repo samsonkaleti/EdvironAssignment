@@ -1,7 +1,7 @@
 
 
 import { Link } from 'react-router-dom';
-import { Home, FileText, School, Settings, ChevronDown } from 'lucide-react';
+import { Home, FileText, School } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 import { useContext } from 'react';
 
@@ -19,7 +19,6 @@ const Sidebar = () => {
             </h2>
             <p className="text-xs text-gray-500">Administrator</p>
           </div>
-          <ChevronDown className="w-4 h-4 text-gray-400" />
         </div>
       </div>
       <nav className="p-4">
@@ -29,7 +28,6 @@ const Sidebar = () => {
             { path: "/transaction", icon: FileText, label: "Transactions" },
             { path: "/school-transactions", icon: School, label: "School Transactions" },
             { path: "/transaction-status-check", icon: FileText, label: "Status Check" },
-            { path: "/settings", icon: Settings, label: "Settings" },
           ].map((item) => (
             <li key={item.path}>
               <Link

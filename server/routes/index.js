@@ -22,7 +22,7 @@ router.get('/transactions/:schoolId', transactionController.getSchoolTransaction
 
 router.get('/transactions/status/:customOrderId', transactionController.checkTransactionStatus);  
 router.get('/transactions/:status', transactionController.getStatusTransactions);  
-router.get('/transactions/amount/:amount', transactionController.getOrderAmountTransactions);   
+router.get('/transactions/:amount', transactionController.getOrderAmountTransactions);   
 router.get('/transactions/transaction-amount/:amount', transactionController.getTransationAmountTransactions);
 
 

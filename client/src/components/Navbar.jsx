@@ -21,11 +21,11 @@ const Navbar = () => {
           <h1 className="text-xl font-semibold text-gray-900">
             School Payments Dashboard
           </h1>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 border-2 border-gray-200 rounded-lg">
             {user && (
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-all"
+                className="flex items-center gap-2 px-4 py-2 text-sm text-red-700 hover:bg-gray-100 rounded-lg transition-all"
               >
                 <LogOut className="w-4 h-4" />
                 Logout
