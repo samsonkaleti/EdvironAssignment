@@ -6,8 +6,12 @@ A full-stack application for managing school payments and transactions, featurin
 - Frontend: [https://edviron-assignment-weld.vercel.app](https://edviron-assignment-weld.vercel.app)
 - Backend API: [https://edvironassignment.onrender.com/api](https://edvironassignment.onrender.com/api)
 
+### login Credentials
+ - Email : test@gmail.com
+ - Password : Test@1234
+
 ### Important Note
-- ⚠️ The hosted server may experience initial delays of up to 1 minute when fetching data. This is due to the free tier hosting limitations on Render. Please be patient during the first request as the server "wakes up" from idle state. 
+- ⚠️ The hosted server may experience initial delays of up to 1 minute when fetching data. This is due to the free tier hosting limitations on Render. Please be patient during the first request as the server "wakes up" from idle state.
 
 
 
