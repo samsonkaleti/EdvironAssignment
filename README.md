@@ -1,4 +1,4 @@
-# School Payment and Dashboard Application
+# Edviron Assignment : School Payment and Dashboard Application
 
 A full-stack application for managing school payments and transactions, featuring a NestJS backend and React frontend.
 
@@ -6,7 +6,13 @@ A full-stack application for managing school payments and transactions, featurin
 - Frontend: [https://edviron-assignment-weld.vercel.app](https://edviron-assignment-weld.vercel.app)
 - Backend API: [https://edvironassignment.onrender.com/api](https://edvironassignment.onrender.com/api)
 
+### Important Note
+- ⚠️ The hosted server may experience initial delays of up to 1 minute when fetching data. This is due to the free tier hosting limitations on Render. Please be patient during the first request as the server "wakes up" from idle state. 
+
+
+
 ## Backend
+
 
 ### Features
 - JWT Authentication
@@ -56,7 +62,7 @@ POST /api/create-payment - Create new payment request
    ```
 4. Start the server:
    ```bash
-   npm run start
+   npm  start
    ```
 
 ## Frontend
@@ -126,4 +132,8 @@ POST /api/create-payment - Create new payment request
 - Frontend: Deployed on Vercel
 - Database: MongoDB Atlas
 
-For any questions or issues, please contact: Email : kaletishyam@gmail.com , 7702762749 ,Portfolio : [text](https://samsonkaleti.netlify.app/)
+For any questions or issues, please contact: 
+- Email : kaletishyam@gmail.com, 
+- Ph : 7702762749,
+- Portfolio: [https://samsonkaleti.netlify.app ](https://samsonkaleti.netlify.app ),
+- Linkedin : [https://www.linkedin.com/in/samsonkaleti](https://www.linkedin.com/in/samsonkaleti)
