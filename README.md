@@ -1,6 +1,6 @@
 # Edviron Assignment : School Payment and Dashboard Application
 
-A full-stack application for managing school payments and transactions, featuring a NestJS backend and React frontend.
+A full-stack application for managing school payments and transactions, featuring a NodeJS backend and React frontend.
 
 ## Live Demos
 - Frontend: [https://edviron-assignment-weld.vercel.app](https://edviron-assignment-weld.vercel.app)
