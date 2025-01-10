@@ -1,7 +1,6 @@
 const CollectRequest = require('../models/CollectRequest');
 const CollectRequestStatus = require('../models/CollectRequestStatus');
 const axios = require('axios'); 
-const mongoose = require('mongoose'); 
 require('dotenv').config();
 
 const getAllTransactions = async (filters = {}) => {
@@ -19,17 +18,14 @@ const getAllTransactions = async (filters = {}) => {
 }; 
 
 const getCollectTransactions = async (collectId) => {
-    // Use findOne instead of findById
     const status = await CollectRequestStatus.findOne({ collect_id: collectId });
     if (!status) throw new Error('Transaction not found');
 
-    // Fetch the corresponding CollectRequest
     const request = await CollectRequest.findById(collectId);
     if (!request) throw new Error('CollectRequest not found');
 
     return mergeTransactionData(request, status);
 };
-
 
 const getGatewayTransactions = async (gateway) => {
     const requests = await CollectRequest.find({ gateway });
@@ -84,9 +80,6 @@ const getCustomeOrdrIdTransactions = async (customOrderId) => {
     );
 };
 
-
-
-
 const getSchoolTransactions = async (schoolId) => {
     const collectRequests = await CollectRequest.find({ school_id: schoolId });
     return Promise.all(
@@ -96,9 +89,6 @@ const getSchoolTransactions = async (schoolId) => {
         })
     );
 }; 
-
-
-
 
 const checkTransactionStatus = async (customOrderId) => {
     const request = await CollectRequest.findOne({ custom_order_id: customOrderId });
@@ -119,7 +109,7 @@ const createPaymentRequest = async (data) => {
 
 
     const payload = {
-        school_id: data.school_id, // Use SCHOOL_ID from the request body
+        school_id: data.school_id, 
         pg_key: process.env.PG_KEY,
         collect_id: collectRequest._id,
         custom_order_id: collectRequest.custom_order_id,
@@ -136,10 +126,9 @@ const createPaymentRequest = async (data) => {
             }
         }
     ); 
-    // Save the transaction status in CollectRequestStatus
     await CollectRequestStatus.create({
         collect_id: collectRequest._id,
-        status: 'PENDING', // Initial status
+        status: 'PENDING', 
         gateway: 'CASHFREE',
         transaction_amount: null,
         bank_reference: null
@@ -161,7 +150,6 @@ const handleWebhook = async (data) => {
             throw new Error('Invalid webhook payload: Missing order_info or order_id');
         }
 
-        // Find the transaction by custom_order_id
         const existingTransaction = await CollectRequest.findOne({
             custom_order_id: order_info.order_id
         });
@@ -170,8 +158,6 @@ const handleWebhook = async (data) => {
             throw new Error(`Transaction with ID ${order_info.order_id} not found`);
         }
 
-        // Update or create the transaction status
-        // Note that collect_id is stored as String
         const updatedStatus = await CollectRequestStatus.findOneAndUpdate(
             { collect_id: existingTransaction._id.toString() },
             {
@@ -179,7 +165,7 @@ const handleWebhook = async (data) => {
                 payment_method: order_info.payment_method,
                 gateway: order_info.gateway || existingTransaction.gateway,
                 transaction_amount: order_info.transaction_amount,
-                bank_refrence: order_info.bank_reference  // Note: incoming payload uses reference, model uses refrence
+                bank_refrence: order_info.bank_reference
             },
             { upsert: true, new: true }
         );
@@ -197,7 +183,6 @@ const updateTransactionStatus = async (data) => {
     try {
         const { transactionId, status, payment_method, bank_refrence } = data;
 
-        // Find the transaction by custom_order_id
         const existingTransaction = await CollectRequest.findOne({
             custom_order_id: transactionId
         });
@@ -206,7 +191,6 @@ const updateTransactionStatus = async (data) => {
             throw new Error(`Transaction with ID ${transactionId} not found`);
         }
 
-        // Update the status
         const updatedStatus = await CollectRequestStatus.findOneAndUpdate(
             { collect_id: existingTransaction._id.toString() },
             {

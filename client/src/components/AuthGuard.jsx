@@ -1,4 +1,4 @@
-// src/components/AuthGuard.jsx
+
 import { Navigate, Outlet } from 'react-router-dom';
 
 const AuthGuard = () => {

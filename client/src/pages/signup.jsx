@@ -4,16 +4,20 @@ import { signup } from '../services/authService';
 
 const SignupPage = () => {
   const [formData, setFormData] = useState({ email: '', password: '', username: '' });
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(null); 
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await signup(formData);
       navigate('/');
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -72,11 +76,11 @@ const SignupPage = () => {
           </div>
 
           <div>
-            <button
+          <button
               type="submit"
               className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-4 rounded-lg hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out font-medium"
             >
-              Create Account
+              {loading ? "Loading..." : "Create Account"}
             </button>
           </div>
         </form>

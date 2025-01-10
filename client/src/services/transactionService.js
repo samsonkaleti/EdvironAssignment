@@ -15,7 +15,7 @@ export const fetchTransactionsService = async ({ status, startDate, endDate }) =
         endDate: endDate ? endDate.toISOString() : null,
       },
     });
-    return data; // Assuming the data is the array of transactions
+    return data; 
   } catch (error) {
     console.error("Error fetching transactions:", error);
     throw error;

@@ -3,22 +3,20 @@ import axios from "axios";
 import {ChevronRight,ChevronLeft,Search } from "lucide-react"
 import TransactionTable from "../components/TransactionTable"; 
 import { Base_url } from "../constants";
-import { LoadingDots } from "../utils/Loding";
+import { ErrorMessage, LoadingDots } from "../utils/Loding";
 
 const SchoolTransactionsPage = () => {
-  const [schoolId, setSchoolId] = useState(""); // Selected school ID
-  const [transactions, setTransactions] = useState([]); // Filtered transactions
-  const [allTransactions, setAllTransactions] = useState([]); // All transactions from the API
-  const [schools, setSchools] = useState([]); // Extracted school IDs
-  const [searchTerm, setSearchTerm] = useState(""); // Search term for collect_id
-  const [loading, setLoading] = useState(false); // Loading state
-  const [error, setError] = useState(null); // Error state
+  const [schoolId, setSchoolId] = useState(""); 
+  const [transactions, setTransactions] = useState([]); 
+  const [allTransactions, setAllTransactions] = useState([]);
+  const [schools, setSchools] = useState([]); 
+  const [searchTerm, setSearchTerm] = useState(""); 
+  const [loading, setLoading] = useState(false); 
+  const [error, setError] = useState(null); 
 
-  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const transactionsPerPage = 8; // Number of transactions per page
+  const transactionsPerPage = 8; 
 
-  // Fetch all transactions and extract school IDs
   const fetchAllTransactions = async () => {
     setLoading(true);
     setError(null);
@@ -32,10 +30,8 @@ const SchoolTransactionsPage = () => {
         },
       });
 
-      console.log("Fetched All Transactions:", data); // Debugging log
       setAllTransactions(data);
 
-      // Extract unique school IDs from transactions
       const uniqueSchools = [...new Set(data.map((transaction) => transaction.school_id))];
       setSchools(uniqueSchools);
     } catch (error) {
@@ -47,18 +43,15 @@ const SchoolTransactionsPage = () => {
     };
   } ;
 
-  // Filter transactions based on selected school ID and search term
   useEffect(() => {
     let filteredTransactions = allTransactions;
 
-    // Filter by school_id if selected
     if (schoolId) {
       filteredTransactions = filteredTransactions.filter(
         (transaction) => transaction.school_id === schoolId
       );
     }
 
-    // Filter by searchTerm if entered
     if (searchTerm) {
       filteredTransactions = filteredTransactions.filter((transaction) =>
         transaction.collect_id.toLowerCase().includes(searchTerm.toLowerCase())
@@ -66,25 +59,25 @@ const SchoolTransactionsPage = () => {
     }
 
     setTransactions(filteredTransactions);
-    setCurrentPage(1); // Reset to the first page when filters change
+    setCurrentPage(1); 
   }, [schoolId, searchTerm, allTransactions]);
 
-  // Fetch all transactions on component mount
   useEffect(() => {
     fetchAllTransactions();
   }, []);
 
-  // Calculate the current page's transactions
   const indexOfLastTransaction = currentPage * transactionsPerPage;
   const indexOfFirstTransaction = indexOfLastTransaction - transactionsPerPage;
   const currentTransactions = transactions.slice(indexOfFirstTransaction, indexOfLastTransaction);
 
-  // Calculate the total number of pages
   const totalPages = Math.ceil(transactions.length / transactionsPerPage); 
  if (loading) {
     return (
         <LoadingDots message="Loading transaction data..." />
     );
+  } 
+  if(error) {
+    return <ErrorMessage error = {error} />;
   }
   return (
     <div className="h-[calc(100vh-4rem)] overflow-y-auto bg-gray-50">

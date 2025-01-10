@@ -4,7 +4,6 @@ const handleWebhook = async (req, res) => {
     try {
         const webhookData = req.body;
         
-        // Validate webhook payload
         if (!webhookData.status || !webhookData.order_info) {
             return res.status(400).json({
                 success: false,
@@ -35,7 +34,7 @@ const updateTransactionStatus = async (req, res) => {
             transactionId, 
             status, 
             payment_method, 
-            bank_refrence  // Note the spelling matches the model
+            bank_refrence  
         } = req.body;
 
         if (!transactionId || !status) {
@@ -45,7 +44,6 @@ const updateTransactionStatus = async (req, res) => {
             });
         }
 
-        // Validate status enum
         const validStatuses = ['SUCCESS', 'PENDING', 'FAILED'];
         if (!validStatuses.includes(status.toUpperCase())) {
             return res.status(400).json({

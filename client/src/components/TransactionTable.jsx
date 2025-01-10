@@ -16,6 +16,7 @@ const TransactionTable = ({ transactions }) => {
             </tr>
           </thead>
           <tbody>
+            
             {transactions.slice(0, 10).map((tx) => (
               <tr key={tx.collect_id} className="border-t transition-all hover:-translate-y-0.5 hover:shadow-lg duration-200 ease-in-out transform">
                 <td className="px-4 py-4">{tx.collect_id}</td>

@@ -14,11 +14,11 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white border-b border-gray-100 fixed top-0 left-0 w-full z-20 ">
+    <nav className="bg-white border-b border-gray-100 fixed top-0 left-0 w-full z-10  ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-[85px]">
-          <h1 className="text-xl font-semibold text-gray-900">
-            School Payments Dashboard
+          <h1 className="text-3xl text-gray-500 font-semibold "> 
+            School Payments Dashboard 
           </h1>
           <div className="flex items-center gap-4 border-2 border-gray-200 rounded-lg">
             {user && (

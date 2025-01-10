@@ -16,7 +16,6 @@ const TransactionsPage = () => {
   const [loading, setLoading] = useState(false);
   
 
-  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const transactionsPerPage = 6;
 
@@ -29,7 +28,6 @@ const TransactionsPage = () => {
         endDate: dateRange[1],
       });
 
-      // Add dummy dates for filtering
       const enrichedData = data.map((transaction, index) => ({
         ...transaction,
         createdAt: new Date(2025, 0, index + 1), // Dummy dates for testing
@@ -47,11 +45,9 @@ const TransactionsPage = () => {
     fetchTransactions();
   }, [statusFilter, dateRange]);
 
-  // Filter and Search Logic
   useEffect(() => {
     let filteredData = transactions;
 
-    // Filter by search term
     if (searchTerm) {
       filteredData = filteredData.filter((transaction) =>
         transaction.custom_order_id
@@ -60,7 +56,6 @@ const TransactionsPage = () => {
       );
     }
 
-    // Filter by date range
     if (dateRange[0] && dateRange[1]) {
       filteredData = filteredData.filter(
         (transaction) =>
@@ -72,7 +67,6 @@ const TransactionsPage = () => {
     setFilteredTransactions(filteredData);
   }, [searchTerm, dateRange, transactions]);
 
-  // Pagination Logic
   const indexOfLastTransaction = currentPage * transactionsPerPage;
   const indexOfFirstTransaction = indexOfLastTransaction - transactionsPerPage;
   const currentTransactions = filteredTransactions.slice(
@@ -88,11 +82,10 @@ const TransactionsPage = () => {
 
   return (
     <div className="p-2 bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-semibold mb-2 text-[#2869aa]">Transactions Overview</h1>
+      <h1 className="text-3xl font-semibold mb-2 text-[#2869aa]">All Transactions </h1>
       <p className=" text-sm text-gray-500 mb-6">View and manage  transaction details</p>
 
 
-      {/* Filters */}
       <div className="flex flex-wrap items-center gap-4 mb-6">
         <input
           type="text"
@@ -122,7 +115,6 @@ const TransactionsPage = () => {
         />
       </div>
 
-      {/* Table */}
       <div className=" w-full shadow-xl rounded-lg overflow-hidden ">
         <TransactionTable transactions = {currentTransactions} />
 

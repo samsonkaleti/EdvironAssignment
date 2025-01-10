@@ -1,5 +1,6 @@
 import { Loader2, AlertCircle } from 'lucide-react';
 
+// eslint-disable-next-line react/prop-types
 export const LoadingSpinner = ({ message = "Loading..." }) => {
   return (
     <div className="w-full h-64 flex flex-col items-center justify-center gap-3">
@@ -9,6 +10,7 @@ export const LoadingSpinner = ({ message = "Loading..." }) => {
   );
 };
 
+// eslint-disable-next-line react/prop-types
 export const LoadingDots = ({ message = "Loading..." }) => {
   return (
     <div className="w-full h-screen flex items-center justify-center">
@@ -24,12 +26,13 @@ export const LoadingDots = ({ message = "Loading..." }) => {
   );
 };
 
+// eslint-disable-next-line react/prop-types
 export const ErrorMessage = ({ error, className = "" }) => {
   return (
     <div className={`w-full p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-3 ${className}`}>
       <AlertCircle className="h-5 w-5 text-red-500" />
       <div className="flex-1 text-red-700">
-        {error instanceof Error ? error.message : error}
+        {error.message || "An error occurred. Please try again later."}
       </div>
     </div>
   );

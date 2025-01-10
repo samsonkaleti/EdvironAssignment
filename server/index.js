@@ -14,18 +14,16 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin:[ "https://edviron-assignment-weld.vercel.app"," http://localhost:5173"], // Replace with your frontend URL in production
+    origin:[ "https://edviron-assignment-weld.vercel.app","http://localhost:5173"], 
     methods: ["GET", "POST","PUT","DELETE"],
     credentials: true,
   })
 );
 connectDB();
 
-// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api", routes);
 
-// Start the server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });

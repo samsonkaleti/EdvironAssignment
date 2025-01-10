@@ -38,42 +38,36 @@ const TransactionDashboard = () => {
     }
   };
 
-  const handleFilterChange = async (type, value) => {
+  const handleFilterChange = (type, value) => {
     setFilters(prev => ({ ...prev, [type]: value }));
-    
-    if (!value) {
-      fetchTransactions();
-      return;
-    } 
+  };
 
-    if (type === 'status') {
-      fetchTransactions(`/transactions?status=${value}`);
+  const handleSearch = () => {
+    if (filters.schoolId) {
+      fetchTransactions(`/transactions/${filters.schoolId}`);
       return;
     }
-
-
-    let endpoint = '/transactions';
-    switch (type) {
-      case 'collectId':
-        endpoint = `/transactions/collect/${value}`;
-        break;
-      case 'gateway':
-        endpoint = `/transactions/gateway/${value}`;
-        break;
-      case 'schoolId':
-        endpoint = `/transactions/${value}`;
-        break;
-      case 'customOrderId':
-        endpoint = `/transactions/status/${value}`;
-        break;
-      case 'status':
-        endpoint = `/transactions/`;
-        break;
-      case 'amount':
-        endpoint = `/transactions/${value}`;
-        break;
+    if (filters.gateway) {
+      fetchTransactions(`/transactions/gateway/${filters.gateway}`);
+      return;
     }
-    fetchTransactions(endpoint);
+    if (filters.status) {
+      fetchTransactions(`/transactions?status=${filters.status}`);
+      return;
+    }
+    fetchTransactions();
+  };
+
+  const handleClearFilters = () => {
+    setFilters({
+      collectId: '',
+      gateway: '',
+      schoolId: '',
+      customOrderId: '',
+      status: '',
+      amount: ''
+    });
+    fetchTransactions();
   };
 
   useEffect(() => {
@@ -84,7 +78,6 @@ const TransactionDashboard = () => {
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
 
-  // Memoized calculations
   const paymentMethodData = React.useMemo(() => {
     const distribution = {};
     transactions.forEach(tx => {
@@ -93,14 +86,7 @@ const TransactionDashboard = () => {
     return Object.entries(distribution).map(([name, value]) => ({ name, value }));
   }, [transactions]);
 
-  const gatewayData = React.useMemo(() => {
-    const distribution = {};
-    transactions.forEach(tx => {
-      distribution[tx.gateway] = (distribution[tx.gateway] || 0) + 1;
-    });
-    return Object.entries(distribution).map(([name, value]) => ({ name, value }));
-  }, [transactions]);
-
+ 
   const statusData = React.useMemo(() => {
     const distribution = {};
     transactions.forEach(tx => {
@@ -123,8 +109,9 @@ const TransactionDashboard = () => {
   }
 
   return (
-    <div className="space-y-6 w-full p-6"> {/* Removed ml-64 and px-6 as they're handled by layout */}
-      {/* Filters */}
+    <div className="space-y-6 w-full p-6"> 
+          <h1 className="text-3xl font-semibold mb-2 text-[#2869aa]">Transactions Overview</h1>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-white p-4 rounded-lg shadow">
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700">School ID</label>
@@ -159,9 +146,22 @@ const TransactionDashboard = () => {
             <option value="PENDING">Pending</option>
           </select>
         </div>
+        <div className="md:col-span-3 flex justify-end space-x-4 mt-4">
+          <button
+            onClick={handleClearFilters}
+            className="px-4 py-2 text-gray-600 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
+          >
+            Clear Filters
+          </button>
+          <button
+            onClick={handleSearch}
+            className="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
+          >
+            Search
+          </button>
+        </div>
       </div>
 
-      {/* Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-white p-4 rounded-lg shadow">
           <h3 className="text-lg font-semibold text-gray-700">Total Transactions</h3>
@@ -187,7 +187,6 @@ const TransactionDashboard = () => {
         </div>
       </div>
 
-      {/* Charts */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white p-4 rounded-lg shadow">
           <h3 className="text-lg font-semibold text-gray-700 mb-4">Payment Methods</h3>
@@ -222,7 +221,6 @@ const TransactionDashboard = () => {
         </div>
       </div>
 
-      {/* Recent Transactions Table */}
       <div className="bg-white p-4 rounded-lg shadow overflow-x-auto">
         <h3 className="text-lg font-semibold text-gray-700 mb-4">Recent Transactions</h3>
         <TransactionTable transactions={transactions} />
