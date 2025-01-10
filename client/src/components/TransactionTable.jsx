@@ -1,3 +1,4 @@
+
 // eslint-disable-next-line react/prop-types
 const TransactionTable = ({ transactions }) => {
     return (
@@ -41,5 +42,5 @@ const TransactionTable = ({ transactions }) => {
         </table>
       </div>
     );
-  }; 
+  }
     export default TransactionTable;

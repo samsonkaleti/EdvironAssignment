@@ -48,7 +48,7 @@ const TransactionDashboard = () => {
       return;
     }
     if (filters.gateway) {
-      fetchTransactions(`/transactions/gateway/${filters.gateway}`);
+      fetchTransactions(`/transactions/gateway/${filters.gateway.toUpperCase()}`);
       return;
     }
     if (filters.status) {
@@ -221,7 +221,7 @@ const TransactionDashboard = () => {
         </div>
       </div>
 
-      <div className="bg-white p-4 rounded-lg shadow overflow-x-auto">
+      <div className="bg-white p-4 rounded-lg shadow overflow-x-auto min-w-full">
         <h3 className="text-lg font-semibold text-gray-700 mb-4">Recent Transactions</h3>
         <TransactionTable transactions={transactions} />
       </div>
