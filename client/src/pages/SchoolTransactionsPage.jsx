@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios"; 
 import {ChevronRight,ChevronLeft,Search } from "lucide-react"
-import TransactionTable from "../components/TransactionTable";
+import TransactionTable from "../components/TransactionTable"; 
+import { Base_url } from "../constants";
+import { LoadingDots } from "../utils/Loding";
 
 const SchoolTransactionsPage = () => {
   const [schoolId, setSchoolId] = useState(""); // Selected school ID
@@ -9,6 +11,8 @@ const SchoolTransactionsPage = () => {
   const [allTransactions, setAllTransactions] = useState([]); // All transactions from the API
   const [schools, setSchools] = useState([]); // Extracted school IDs
   const [searchTerm, setSearchTerm] = useState(""); // Search term for collect_id
+  const [loading, setLoading] = useState(false); // Loading state
+  const [error, setError] = useState(null); // Error state
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,9 +20,12 @@ const SchoolTransactionsPage = () => {
 
   // Fetch all transactions and extract school IDs
   const fetchAllTransactions = async () => {
+    setLoading(true);
+    setError(null);
+
     try {
       const token = localStorage.getItem("token");
-      const { data } = await axios.get("https://edvironassignment.onrender.com/api/transactions", {
+      const { data } = await axios.get(`${Base_url}/api/transactions`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -33,8 +40,12 @@ const SchoolTransactionsPage = () => {
       setSchools(uniqueSchools);
     } catch (error) {
       console.error("Error fetching transactions:", error);
-    }
-  };
+      setError(error);
+      throw new Error;
+    } finally {
+      setLoading(false);
+    };
+  } ;
 
   // Filter transactions based on selected school ID and search term
   useEffect(() => {
@@ -69,8 +80,12 @@ const SchoolTransactionsPage = () => {
   const currentTransactions = transactions.slice(indexOfFirstTransaction, indexOfLastTransaction);
 
   // Calculate the total number of pages
-  const totalPages = Math.ceil(transactions.length / transactionsPerPage);
-
+  const totalPages = Math.ceil(transactions.length / transactionsPerPage); 
+ if (loading) {
+    return (
+        <LoadingDots message="Loading transaction data..." />
+    );
+  }
   return (
     <div className="h-[calc(100vh-4rem)] overflow-y-auto bg-gray-50">
       <div className="max-w-8xl mx-auto p-6">

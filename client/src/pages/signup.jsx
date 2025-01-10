@@ -11,7 +11,7 @@ const SignupPage = () => {
     e.preventDefault();
     try {
       await signup(formData);
-      navigate('/login');
+      navigate('/');
     } catch (err) {
       setError(err.message);
     }
@@ -85,7 +85,7 @@ const SignupPage = () => {
           <p className="text-gray-600">
             Already have an account?{' '}
             <span
-              onClick={() => navigate('/login')}
+              onClick={() => navigate('/')}
               className="text-indigo-600 hover:text-indigo-800 cursor-pointer font-medium transition duration-150 ease-in-out"
             >
               Sign in

@@ -19,8 +19,10 @@ const Layout = () => {
     <div className="min-h-screen bg-gray-50">
       {!hideLayout && <Navbar />}
       <div className="flex">
-        {!hideLayout && <Sidebar />}
-        <main className={`${hideLayout ? "w-full" : "flex-1 p-6"}`}>
+        {!hideLayout && (
+          <Sidebar className="flex-shrink-0 w-64" />
+        )}
+        <main className={`flex-1 pt-[90px] ${!hideLayout ? 'ml-64' : ''} p-6 overflow-auto `}>
           <Routes>
             <Route path="/" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />

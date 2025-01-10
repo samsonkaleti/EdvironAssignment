@@ -1,31 +1,42 @@
-import { useState, useEffect } from 'react';
-import { fetchTransactions } from '../services/transactionService';
+import { useState, useCallback } from 'react';
+import axios from 'axios';
+import { Base_url } from '../constants';
 
-const useTransactions = (statusFilter) => {
-  const [transactions, setTransactions] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const token = localStorage.getItem('token'); // Retrieve token from localStorage
-
-  const loadTransactions = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchTransactions(statusFilter, token);
-      setTransactions(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+export const useTransactions = () => {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+  
+    const fetchTransactions = useCallback(async ({ status, startDate, endDate }) => {
+      const token = localStorage.getItem('token');
+      setLoading(true);
+      setError(null);
+  
+      try {
+        const { data } = await axios.get(`${Base_url}/api/transactions`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          params: {
+            status,
+            startDate: startDate ? startDate.toISOString() : null,
+            endDate: endDate ? endDate.toISOString() : null,
+          },
+        });
+        return data;
+      } catch (error) {
+        const errorMessage = error.response?.data?.message || error.message || 'Failed to fetch transactions';
+        setError(errorMessage);
+        throw error;
+      } finally {
+        setLoading(false);
+      }
+    }, []);
+  
+    return {
+      loading,
+      error,
+      fetchTransactions,
+    };
   };
-
-  useEffect(() => {
-    loadTransactions();
-  }, [filters]); // Re-fetch data whenever filters change
-
-  return { transactions, loading, error, reload: loadTransactions };
-};
-
-export default useTransactions;
+  

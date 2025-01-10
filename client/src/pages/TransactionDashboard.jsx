@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell } from 'recharts';
 import TransactionTable from '../components/TransactionTable';
+import { Base_url } from '../constants'; 
+import { LoadingDots, ErrorMessage } from "../utils/Loding"
 
 const TransactionDashboard = () => {
   const [transactions, setTransactions] = useState([]);
@@ -19,7 +21,7 @@ const TransactionDashboard = () => {
   const fetchTransactions = async (endpoint = '/transactions') => {
     setLoading(true);
     try {
-      const response = await fetch(`https://edvironassignment.onrender.com/api${endpoint}`,{
+      const response = await fetch(`${Base_url}/api${endpoint}`,{
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -112,22 +114,16 @@ const TransactionDashboard = () => {
 
   if (loading) {
     return (
-      <div className="w-full h-64 flex items-center justify-center">
-        <div className="text-lg">Loading transaction data...</div>
-      </div>
+        <LoadingDots message="Loading transaction data..." />
     );
   }
 
   if (error) {
-    return (
-      <div className="w-full p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
-        Error loading transaction data: {error}
-      </div>
-    );
+    return <ErrorMessage error={error} />;
   }
 
   return (
-    <div className="w-full p-6 space-y-6">
+    <div className="space-y-6 w-full p-6"> {/* Removed ml-64 and px-6 as they're handled by layout */}
       {/* Filters */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-white p-4 rounded-lg shadow">
         <div className="space-y-2">
@@ -229,8 +225,7 @@ const TransactionDashboard = () => {
       {/* Recent Transactions Table */}
       <div className="bg-white p-4 rounded-lg shadow overflow-x-auto">
         <h3 className="text-lg font-semibold text-gray-700 mb-4">Recent Transactions</h3>
-        <TransactionTable transactions = {transactions}/>
-
+        <TransactionTable transactions={transactions} />
       </div>
     </div>
   );

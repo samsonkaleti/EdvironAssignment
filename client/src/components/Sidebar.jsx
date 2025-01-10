@@ -1,16 +1,13 @@
-
-
 import { Link } from 'react-router-dom';
 import { Home, FileText, School } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 import { useContext } from 'react';
 
-
 const Sidebar = () => {
   const { user } = useContext(AuthContext);
 
   return (
-    <aside className="w-64 bg-white border-r border-gray-100 h-screen">
+    <aside className="flex-shrink-0 fixed top-0 left-0 w-64 bg-white border-r border-gray-100 h-screen overflow-y-auto z-10">
       <div className="p-6 border-b border-gray-100">
         <div className="flex items-center justify-between">
           <div className="flex-1 min-w-0">
@@ -24,10 +21,10 @@ const Sidebar = () => {
       <nav className="p-4">
         <ul className="space-y-1">
           {[
-            { path: "/dashboard", icon: Home, label: "Dashboard" },
-            { path: "/transaction", icon: FileText, label: "Transactions" },
-            { path: "/school-transactions", icon: School, label: "School Transactions" },
-            { path: "/transaction-status-check", icon: FileText, label: "Status Check" },
+            { path: '/dashboard', icon: Home, label: 'Dashboard' },
+            { path: '/transaction', icon: FileText, label: 'Transactions' },
+            { path: '/school-transactions', icon: School, label: 'School Transactions' },
+            { path: '/transaction-status-check', icon: FileText, label: 'Status Check' },
           ].map((item) => (
             <li key={item.path}>
               <Link
@@ -46,4 +43,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-

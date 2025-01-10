@@ -3,20 +3,25 @@ import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { fetchTransactionsService } from "../services/transactionService"
 import TransactionTable from "../components/TransactionTable";
-import {ChevronLeft,ChevronRight} from 'lucide-react'
+import {ChevronLeft,ChevronRight} from 'lucide-react' 
+import { LoadingDots } from "../utils/Loding";
+
 
 const TransactionsPage = () => {
   const [transactions, setTransactions] = useState([]);
   const [filteredTransactions, setFilteredTransactions] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
-  const [dateRange, setDateRange] = useState([null, null]);
+  const [dateRange, setDateRange] = useState([null, null]); 
+  const [loading, setLoading] = useState(false);
+  
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const transactionsPerPage = 6;
 
   const fetchTransactions = async () => {
+    setLoading(true);
     try {
       const data = await fetchTransactionsService({
         status: statusFilter,
@@ -33,6 +38,8 @@ const TransactionsPage = () => {
       setTransactions(enrichedData);
     } catch (error) {
       console.error("Failed to fetch transactions:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -73,7 +80,11 @@ const TransactionsPage = () => {
     indexOfLastTransaction
   );
 
-  const totalPages = Math.ceil(filteredTransactions.length / transactionsPerPage);
+  const totalPages = Math.ceil(filteredTransactions.length / transactionsPerPage); 
+
+  if(loading) {
+    return <LoadingDots message="Loading transactions..." />;
+  }
 
   return (
     <div className="p-2 bg-gray-50 min-h-screen">

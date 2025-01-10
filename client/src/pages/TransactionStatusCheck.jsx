@@ -1,5 +1,7 @@
 import  { useState } from "react";
-import axios from "axios";
+import axios from "axios"; 
+import { Base_url } from "../constants";
+import { ErrorMessage, LoadingDots } from "../utils/Loding";
 
 const TransactionStatusCheck = () => {
   const [customOrderId, setCustomOrderId] = useState("");
@@ -15,7 +17,7 @@ const TransactionStatusCheck = () => {
 
     try {
       const response = await axios.get(
-        `https://edvironassignment.onrender.com/api/transactions/status/${customOrderId}`,
+        `${Base_url}/api/transactions/status/${customOrderId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -29,7 +31,14 @@ const TransactionStatusCheck = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }; 
+
+   if (loading) {
+      return (
+          <LoadingDots message="Loading transaction data..." />
+      );
+    } 
+    
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -60,7 +69,7 @@ const TransactionStatusCheck = () => {
 
           {error && (
             <div className="mt-6 bg-red-50 border-l-4 border-red-500 p-4">
-              <p className="text-red-700">{error}</p>
+              <ErrorMessage error = {error}/>
             </div>
           )}
 
