@@ -14,7 +14,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "https://edviron-assignment-weld.vercel.app", // Replace with your frontend URL in production
+    origin:[ "https://edviron-assignment-weld.vercel.app"," http://localhost:5173"], // Replace with your frontend URL in production
     methods: ["GET", "POST","PUT","DELETE"],
     credentials: true,
   })
