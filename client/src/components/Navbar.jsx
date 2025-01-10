@@ -14,9 +14,9 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white border-b border-gray-100 fixed top-0 left-0 w-full z-10  ">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-[85px]">
+    <nav className="bg-white border-b border-gray-100 fixed top-0 left-64  w-full  z-10  ">
+      <div className="max-w-7xl  px-2 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-[84px]">
           <h1 className="text-3xl text-gray-500 font-semibold "> 
             School Payments Dashboard 
           </h1>
