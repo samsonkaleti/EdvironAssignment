@@ -24,7 +24,7 @@ const Sidebar = () => {
       <nav className="p-4">
         <ul className="space-y-1">
           {[
-            { path: "/", icon: Home, label: "Dashboard" },
+            { path: "/dashboard", icon: Home, label: "Dashboard" },
             { path: "/transaction", icon: FileText, label: "Transactions" },
             { path: "/school-transactions", icon: School, label: "School Transactions" },
             { path: "/transaction-status-check", icon: FileText, label: "Status Check" },

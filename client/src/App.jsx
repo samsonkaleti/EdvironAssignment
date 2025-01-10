@@ -13,7 +13,7 @@ import TransactionDashboard from "./pages/TransactionDashboard"
 // Separate Component for Layout Logic
 const Layout = () => {
   const location = useLocation();
-  const hideLayout = location.pathname === "/login" || location.pathname === "/signup";
+  const hideLayout = location.pathname === "/" || location.pathname === "/signup";
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -22,10 +22,10 @@ const Layout = () => {
         {!hideLayout && <Sidebar />}
         <main className={`${hideLayout ? "w-full" : "flex-1 p-6"}`}>
           <Routes>
-            <Route path="/login" element={<LoginPage />} />
+            <Route path="/" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route element={<AuthGuard />}>
-              <Route path="/" element={<TransactionDashboard />} />
+              <Route path="/dashboard" element={<TransactionDashboard />} />
               <Route path="/transaction" element={<TransactionsPage />} />
               <Route path="/school-transactions" element={<SchoolTransactionsPage />} />
               <Route path="/transaction-status-check" element={<TransactionStatusCheck />} />

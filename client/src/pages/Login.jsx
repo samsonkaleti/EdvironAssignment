@@ -22,7 +22,7 @@ const LoginPage = () => {
       localStorage.setItem('token', token);
 
       // Navigate to the home page
-      navigate('/');
+      navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'An error occurred. Please try again.');
     }
